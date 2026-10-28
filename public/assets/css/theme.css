@@ -1,8 +1,8 @@
 /*
   Tokens de color por paleta.
-  Tailwind se usa vía CDN para el maquetado (ver index.html);
-  este archivo solo define lo que Tailwind CDN no puede resolver:
-  variables CSS por tema y un par de utilidades puntuales.
+  El resto del diseño (layout, sombras, animaciones, glassmorphism) vive
+  en utilidades de Tailwind directamente en el HTML; aquí solo quedan
+  las variables CSS que cada paleta sobreescribe.
 */
 
 body[data-theme="ocean"] {
@@ -42,43 +42,4 @@ body[data-theme="forest"] {
   --accent-contrast: #ffffff;
   --border: #dcebe0;
   --danger: #c5423f;
-}
-
-/* Selector visual de paletas (los 3 puntos) */
-
-.theme-switcher {
-  display: flex;
-  gap: 10px;
-  padding: 6px;
-  border-radius: 999px;
-  background: var(--surface-muted);
-}
-
-.theme-dot {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  padding: 0;
-}
-
-.theme-dot--ocean  { background: linear-gradient(135deg, #5fc3e4, #1d6fb8); }
-.theme-dot--sunset { background: linear-gradient(135deg, #f6b04f, #e8622c); }
-.theme-dot--forest { background: linear-gradient(135deg, #8fd19e, #2f8f5b); }
-
-.theme-dot[aria-pressed="true"] {
-  border-color: var(--text);
-}
-
-/* Animación de error de formulario */
-
-.shake {
-  animation: shake .35s;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  75% { transform: translateX(6px); }
 }

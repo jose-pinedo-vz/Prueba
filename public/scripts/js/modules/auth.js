@@ -5,20 +5,42 @@ const USERS = [
   { username: "demo", password: "demo123", name: "Invitado" },
 ];
 
+function triggerShake(el) {
+  el.classList.remove("animate-shake");
+  void el.offsetWidth; // fuerza reflow para poder repetir la animación
+  el.classList.add("animate-shake");
+}
+
 function showError(message) {
   const errorEl = document.getElementById("formError");
-  errorEl.textContent = message;
+  document.getElementById("formErrorText").textContent = message;
   errorEl.hidden = false;
-
-  const card = document.querySelector("#loginForm").closest("div.flex-1");
-  card.classList.remove("shake");
-  requestAnimationFrame(() => card.classList.add("shake"));
+  triggerShake(errorEl);
 }
 
 function clearError() {
   const errorEl = document.getElementById("formError");
   errorEl.hidden = true;
-  errorEl.textContent = "";
+  errorEl.classList.remove("animate-shake");
+}
+
+// Transición fade + slide entre el formulario y el panel de éxito.
+function fadeOut(el, onDone) {
+  el.classList.add("opacity-0", "-translate-y-2");
+  setTimeout(() => {
+    el.hidden = true;
+    onDone?.();
+  }, 300);
+}
+
+function fadeIn(el) {
+  el.hidden = false;
+  el.classList.add("opacity-0", "translate-y-2");
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.classList.remove("opacity-0", "-translate-y-2", "translate-y-2");
+    });
+  });
 }
 
 export function initLoginForm() {
@@ -46,14 +68,16 @@ export function initLoginForm() {
       return;
     }
 
-    form.hidden = true;
-    successName.textContent = user.name;
-    successPanel.hidden = false;
+    fadeOut(form, () => {
+      successName.textContent = user.name;
+      fadeIn(successPanel);
+    });
   });
 
   logoutBtn.addEventListener("click", () => {
-    form.reset();
-    form.hidden = false;
-    successPanel.hidden = true;
+    fadeOut(successPanel, () => {
+      form.reset();
+      fadeIn(form);
+    });
   });
 }
