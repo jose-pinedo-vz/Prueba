@@ -1,0 +1,84 @@
+/*
+  Tokens de color por paleta.
+  Tailwind se usa vía CDN para el maquetado (ver index.html);
+  este archivo solo define lo que Tailwind CDN no puede resolver:
+  variables CSS por tema y un par de utilidades puntuales.
+*/
+
+body[data-theme="ocean"] {
+  --bg: #0b1726;
+  --surface: #ffffff;
+  --surface-muted: #f3f6fa;
+  --text: #0f1f2e;
+  --text-muted: #5c6b7a;
+  --accent: #1d6fb8;
+  --accent-light: #5fc3e4;
+  --accent-contrast: #ffffff;
+  --border: #e1e7ee;
+  --danger: #d64550;
+}
+
+body[data-theme="sunset"] {
+  --bg: #2b1420;
+  --surface: #fffaf6;
+  --surface-muted: #fdeee3;
+  --text: #2e1a12;
+  --text-muted: #8a6353;
+  --accent: #e8622c;
+  --accent-light: #f6b04f;
+  --accent-contrast: #ffffff;
+  --border: #f0ddcb;
+  --danger: #c4323c;
+}
+
+body[data-theme="forest"] {
+  --bg: #0e1f16;
+  --surface: #f6faf6;
+  --surface-muted: #e9f1ea;
+  --text: #10261b;
+  --text-muted: #5a7266;
+  --accent: #2f8f5b;
+  --accent-light: #8fd19e;
+  --accent-contrast: #ffffff;
+  --border: #dcebe0;
+  --danger: #c5423f;
+}
+
+/* Selector visual de paletas (los 3 puntos) */
+
+.theme-switcher {
+  display: flex;
+  gap: 10px;
+  padding: 6px;
+  border-radius: 999px;
+  background: var(--surface-muted);
+}
+
+.theme-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.theme-dot--ocean  { background: linear-gradient(135deg, #5fc3e4, #1d6fb8); }
+.theme-dot--sunset { background: linear-gradient(135deg, #f6b04f, #e8622c); }
+.theme-dot--forest { background: linear-gradient(135deg, #8fd19e, #2f8f5b); }
+
+.theme-dot[aria-pressed="true"] {
+  border-color: var(--text);
+}
+
+/* Animación de error de formulario */
+
+.shake {
+  animation: shake .35s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}

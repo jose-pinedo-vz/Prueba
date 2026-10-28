@@ -5,43 +5,12 @@ const USERS = [
   { username: "demo", password: "demo123", name: "Invitado" },
 ];
 
-const THEME_KEY = "aurora-theme";
-
-function applyTheme(theme) {
-  document.body.setAttribute("data-theme", theme);
-  document.querySelectorAll("[data-theme-btn]").forEach((btn) => {
-    btn.setAttribute("aria-pressed", btn.dataset.themeBtn === theme ? "true" : "false");
-  });
-  localStorage.setItem(THEME_KEY, theme);
-}
-
-function initTheme() {
-  const saved = localStorage.getItem(THEME_KEY) || "ocean";
-  applyTheme(saved);
-
-  document.querySelectorAll("[data-theme-btn]").forEach((btn) => {
-    btn.addEventListener("click", () => applyTheme(btn.dataset.themeBtn));
-  });
-}
-
-function initPasswordToggle() {
-  const toggle = document.getElementById("togglePassword");
-  const input = document.getElementById("password");
-
-  toggle.addEventListener("click", () => {
-    const isHidden = input.type === "password";
-    input.type = isHidden ? "text" : "password";
-    toggle.textContent = isHidden ? "🙈" : "👁";
-    toggle.setAttribute("aria-label", isHidden ? "Ocultar contraseña" : "Mostrar contraseña");
-  });
-}
-
 function showError(message) {
   const errorEl = document.getElementById("formError");
   errorEl.textContent = message;
   errorEl.hidden = false;
 
-  const card = document.querySelector(".auth__card");
+  const card = document.querySelector("#loginForm").closest("div.flex-1");
   card.classList.remove("shake");
   requestAnimationFrame(() => card.classList.add("shake"));
 }
@@ -52,7 +21,7 @@ function clearError() {
   errorEl.textContent = "";
 }
 
-function initLoginForm() {
+export function initLoginForm() {
   const form = document.getElementById("loginForm");
   const successPanel = document.getElementById("successPanel");
   const successName = document.getElementById("successName");
@@ -88,9 +57,3 @@ function initLoginForm() {
     successPanel.hidden = true;
   });
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  initTheme();
-  initPasswordToggle();
-  initLoginForm();
-});
