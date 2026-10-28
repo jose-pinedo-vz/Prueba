@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iniciar sesión · Aurora Audio</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body data-theme="ocean">
+
+  <div class="page">
+
+    <!-- Panel izquierdo: producto -->
+    <section class="showcase">
+      <div class="showcase__content">
+        <div class="brand">
+          <span class="brand__dot"></span>
+          <span class="brand__name">Aurora Audio</span>
+        </div>
+
+        <h1 class="showcase__title">Tu música,<br>sin cables ni límites.</h1>
+        <p class="showcase__subtitle">
+          Audífonos inalámbricos con cancelación activa de ruido
+          y hasta 30 horas de batería.
+        </p>
+
+        <div class="product" aria-hidden="true">
+          <svg viewBox="0 0 320 320" class="product__svg">
+            <defs>
+              <linearGradient id="caseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--accent-light)" />
+                <stop offset="100%" stop-color="var(--accent)" />
+              </linearGradient>
+              <radialGradient id="glow" cx="50%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="var(--accent-light)" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="var(--accent-light)" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+
+            <circle cx="160" cy="140" r="150" fill="url(#glow)" />
+
+            <!-- Banda -->
+            <path d="M70 150 C70 70 130 25 160 25 C190 25 250 70 250 150"
+                  fill="none" stroke="url(#caseGrad)" stroke-width="14" stroke-linecap="round" />
+
+            <!-- Auricular izquierdo -->
+            <rect x="40" y="140" width="62" height="100" rx="30" fill="url(#caseGrad)" />
+            <circle cx="71" cy="168" r="11" fill="var(--surface)" opacity="0.5" />
+
+            <!-- Auricular derecho -->
+            <rect x="218" y="140" width="62" height="100" rx="30" fill="url(#caseGrad)" />
+            <circle cx="249" cy="168" r="11" fill="var(--surface)" opacity="0.5" />
+          </svg>
+        </div>
+
+        <ul class="features">
+          <li>Cancelación activa de ruido</li>
+          <li>30 h de batería total</li>
+          <li>Resistencia al agua IPX4</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Panel derecho: login -->
+    <section class="auth">
+      <div class="auth__top">
+        <div class="theme-switcher" role="group" aria-label="Elegir paleta de color">
+          <button type="button" class="theme-dot theme-dot--ocean"  data-theme-btn="ocean"  aria-label="Paleta Océano"></button>
+          <button type="button" class="theme-dot theme-dot--sunset" data-theme-btn="sunset" aria-label="Paleta Atardecer"></button>
+          <button type="button" class="theme-dot theme-dot--forest" data-theme-btn="forest" aria-label="Paleta Bosque"></button>
+        </div>
+      </div>
+
+      <div class="auth__card">
+        <h2 class="auth__heading">Bienvenido de nuevo</h2>
+        <p class="auth__sub">Ingresa con tu cuenta para continuar</p>
+
+        <form id="loginForm" class="form" novalidate>
+          <label class="field">
+            <span class="field__label">Usuario</span>
+            <input type="text" id="username" name="username" autocomplete="username" placeholder="ej. admin" />
+          </label>
+
+          <label class="field">
+            <span class="field__label">Contraseña</span>
+            <div class="field__password">
+              <input type="password" id="password" name="password" autocomplete="current-password" placeholder="••••••••" />
+              <button type="button" id="togglePassword" class="field__toggle" aria-label="Mostrar contraseña">👁</button>
+            </div>
+          </label>
+
+          <p id="formError" class="form__error" role="alert" hidden></p>
+
+          <button type="submit" class="button button--primary">Iniciar sesión</button>
+        </form>
+
+        <div id="successPanel" class="success" hidden>
+          <p class="success__title">¡Hola, <span id="successName"></span>! 👋</p>
+          <p class="success__sub">Has iniciado sesión correctamente.</p>
+          <button type="button" id="logoutBtn" class="button button--ghost">Cerrar sesión</button>
+        </div>
+
+        <details class="demo-users">
+          <summary>Usuarios de prueba</summary>
+          <ul>
+            <li><code>admin</code> / <code>admin123</code></li>
+            <li><code>usuario1</code> / <code>clave123</code></li>
+            <li><code>demo</code> / <code>demo123</code></li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
