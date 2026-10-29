@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Aurora Audio - Audífonos inalámbricos premium con cancelación activa de ruido y batería de larga duración." />
+  <title>Aurora Audio · Dashboard</title>
+
+  <!-- Tipografía premium -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS (CDN, sin build local) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-14px)' },
+            },
+            blob: {
+              '0%, 100%': { transform: 'translate(0,0) scale(1)' },
+              '33%': { transform: 'translate(24px,-28px) scale(1.08)' },
+              '66%': { transform: 'translate(-18px,16px) scale(0.95)' },
+            },
+            fadeInUp: {
+              '0%': { opacity: 0, transform: 'translateY(16px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            pop: {
+              '0%': { opacity: 0, transform: 'scale(0.8)' },
+              '60%': { opacity: 1, transform: 'scale(1.06)' },
+              '100%': { opacity: 1, transform: 'scale(1)' },
+            },
+          },
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            blobSlow: 'blob 12s ease-in-out infinite',
+            blobSlower: 'blob 17s ease-in-out infinite',
+            fadeInUp: 'fadeInUp 0.7s ease-out both',
+            pop: 'pop 0.5s cubic-bezier(.34,1.56,.64,1) both',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Font Awesome (CDN, para iconografía) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+  <!-- Tokens de color por paleta -->
+  <link rel="stylesheet" href="assets/css/theme.css" />
+</head>
+<body data-theme="ocean" class="font-sans min-h-screen bg-[var(--surface)] text-[var(--text)] transition-colors duration-500">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 bg-[var(--surface)]/80 backdrop-blur-xl border-b border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+          <span class="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] text-white">
+            <i class="fa-solid fa-bolt text-sm"></i>
+          </span>
+          <span class="font-bold tracking-wide text-lg">Aurora Audio</span>
+        </div>
+
+        <!-- Controles -->
+        <div class="flex items-center gap-4">
+          <!-- Selector de tema -->
+          <div class="inline-flex items-center gap-2 p-1.5 rounded-full bg-[var(--surface-muted)] border border-[var(--border)]" role="group" aria-label="Elegir paleta de color">
+            <button type="button" title="Paleta Océano" aria-label="Paleta Océano" data-theme-btn="ocean"
+              class="w-6 h-6 rounded-full bg-gradient-to-br from-[#5fc3e4] to-[#1d6fb8] ring-offset-2 ring-offset-[var(--surface)] transition-all duration-300 hover:scale-110 aria-pressed:ring-2 aria-pressed:ring-[var(--text)]"></button>
+            <button type="button" title="Paleta Atardecer" aria-label="Paleta Atardecer" data-theme-btn="sunset"
+              class="w-6 h-6 rounded-full bg-gradient-to-br from-[#f6b04f] to-[#e8622c] ring-offset-2 ring-offset-[var(--surface)] transition-all duration-300 hover:scale-110 aria-pressed:ring-2 aria-pressed:ring-[var(--text)]"></button>
+            <button type="button" title="Paleta Bosque" aria-label="Paleta Bosque" data-theme-btn="forest"
+              class="w-6 h-6 rounded-full bg-gradient-to-br from-[#8fd19e] to-[#2f8f5b] ring-offset-2 ring-offset-[var(--surface)] transition-all duration-300 hover:scale-110 aria-pressed:ring-2 aria-pressed:ring-[var(--text)]"></button>
+          </div>
+
+          <!-- Botón logout -->
+          <button type="button" id="logoutBtn" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--surface-muted)] border border-[var(--border)] text-sm font-medium transition-colors duration-300 hover:bg-[var(--border)]">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span class="hidden sm:inline">Cerrar sesión</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-[var(--bg)] via-[var(--bg)] to-[var(--accent)] text-white py-20 sm:py-28">
+      <!-- Blobs decorativos -->
+      <div class="pointer-events-none absolute -top-24 -left-20 w-80 h-80 rounded-full bg-[var(--accent-light)] opacity-30 blur-3xl animate-blobSlow"></div>
+      <div class="pointer-events-none absolute -bottom-24 -right-16 w-96 h-96 rounded-full bg-[var(--accent)] opacity-40 blur-3xl animate-blobSlower"></div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl animate-fadeInUp">
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
+            ¡Hola, <span id="userName" class="bg-gradient-to-r from-white to-[var(--accent-light)] bg-clip-text text-transparent"></span>!
+          </h1>
+          <p class="text-white/80 text-lg sm:text-xl leading-relaxed mb-8">
+            Bienvenido a Aurora Audio. Descubre nuestra línea de audífonos premium diseñados para ofrecer la mejor experiencia de sonido inalámbrico.
+          </p>
+          <a href="#productos" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 text-white font-semibold transition-all duration-300 hover:bg-white/20 hover:-translate-y-0.5">
+            Ver productos
+            <i class="fa-solid fa-arrow-down"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Productos Section -->
+    <section id="productos" class="py-20 sm:py-28 bg-[var(--surface)]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Nuestros Productos</h2>
+          <p class="text-[var(--text-muted)] text-lg max-w-2xl mx-auto">
+            Audífonos inalámbricos de alta calidad con tecnología de cancelación activa de ruido y batería de larga duración.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Aurora Pro -->
+          <article class="group relative rounded-3xl bg-[var(--surface-muted)] border border-[var(--border)] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)]">
+            <div class="p-6">
+              <div class="relative w-full aspect-square mb-6 flex items-center justify-center bg-gradient-to-br from-[var(--surface)] to-[var(--surface-muted)] rounded-2xl">
+                <div class="absolute inset-0 rounded-full bg-[var(--accent-light)] opacity-10 blur-2xl"></div>
+                <svg viewBox="0 0 200 200" class="w-3/4 h-3/4 drop-shadow-xl animate-float">
+                  <defs>
+                    <linearGradient id="proGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--accent-light)" />
+                      <stop offset="100%" stop-color="var(--accent)" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M40 100 C40 40 80 15 100 15 C120 15 160 40 160 100" fill="none" stroke="url(#proGrad)" stroke-width="12" stroke-linecap="round" />
+                  <rect x="20" y="90" width="40" height="65" rx="20" fill="url(#proGrad)" />
+                  <rect x="140" y="90" width="40" height="65" rx="20" fill="url(#proGrad)" />
+                </svg>
+              </div>
+
+              <span class="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs font-semibold uppercase tracking-wider">
+                <i class="fa-solid fa-crown"></i> Premium
+              </span>
+
+              <h3 class="text-2xl font-bold mb-2">Aurora Pro</h3>
+              <p class="text-[var(--text-muted)] text-sm mb-4">
+                Cancelación activa de ruido 2.0, 30 horas de batería, resistencia IPX4 y audio de alta fidelidad.
+              </p>
+
+              <ul class="space-y-2 mb-6 text-sm text-[var(--text-muted)]">
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> ANC 2.0 avanzado
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> 30h de batería
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> Resistencia IPX4
+                </li>
+              </ul>
+
+              <div class="flex items-center justify-between">
+                <span class="text-3xl font-extrabold text-[var(--accent)]">$199</span>
+                <button class="px-5 py-2.5 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] text-white font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_-8px_var(--accent)]">
+                  Comprar
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Aurora Lite -->
+          <article class="group relative rounded-3xl bg-[var(--surface-muted)] border border-[var(--border)] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)]">
+            <div class="p-6">
+              <div class="relative w-full aspect-square mb-6 flex items-center justify-center bg-gradient-to-br from-[var(--surface)] to-[var(--surface-muted)] rounded-2xl">
+                <div class="absolute inset-0 rounded-full bg-[var(--accent-light)] opacity-10 blur-2xl"></div>
+                <svg viewBox="0 0 200 200" class="w-3/4 h-3/4 drop-shadow-xl animate-float" style="animation-delay: -2s;">
+                  <defs>
+                    <linearGradient id="liteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--accent-light)" />
+                      <stop offset="100%" stop-color="var(--accent)" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M40 100 C40 40 80 15 100 15 C120 15 160 40 160 100" fill="none" stroke="url(#liteGrad)" stroke-width="12" stroke-linecap="round" />
+                  <rect x="20" y="90" width="40" height="65" rx="20" fill="url(#liteGrad)" />
+                  <rect x="140" y="90" width="40" height="65" rx="20" fill="url(#liteGrad)" />
+                </svg>
+              </div>
+
+              <span class="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-[var(--surface)] border border-[var(--border)] text-[var(--text-muted)] text-xs font-semibold uppercase tracking-wider">
+                <i class="fa-solid fa-star"></i> Popular
+              </span>
+
+              <h3 class="text-2xl font-bold mb-2">Aurora Lite</h3>
+              <p class="text-[var(--text-muted)] text-sm mb-4">
+                Cancelación de ruido básica, 20 horas de batería y diseño ergonómico para uso diario.
+              </p>
+
+              <ul class="space-y-2 mb-6 text-sm text-[var(--text-muted)]">
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> ANC básico
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> 20h de batería
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> Diseño ligero
+                </li>
+              </ul>
+
+              <div class="flex items-center justify-between">
+                <span class="text-3xl font-extrabold text-[var(--accent)]">$129</span>
+                <button class="px-5 py-2.5 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] text-white font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_-8px_var(--accent)]">
+                  Comprar
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Aurora Studio -->
+          <article class="group relative rounded-3xl bg-[var(--surface-muted)] border border-[var(--border)] overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.15)]">
+            <div class="p-6">
+              <div class="relative w-full aspect-square mb-6 flex items-center justify-center bg-gradient-to-br from-[var(--surface)] to-[var(--surface-muted)] rounded-2xl">
+                <div class="absolute inset-0 rounded-full bg-[var(--accent-light)] opacity-10 blur-2xl"></div>
+                <svg viewBox="0 0 200 200" class="w-3/4 h-3/4 drop-shadow-xl animate-float" style="animation-delay: -4s;">
+                  <defs>
+                    <linearGradient id="studioGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="var(--accent-light)" />
+                      <stop offset="100%" stop-color="var(--accent)" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M40 100 C40 40 80 15 100 15 C120 15 160 40 160 100" fill="none" stroke="url(#studioGrad)" stroke-width="12" stroke-linecap="round" />
+                  <rect x="20" y="90" width="40" height="65" rx="20" fill="url(#studioGrad)" />
+                  <rect x="140" y="90" width="40" height="65" rx="20" fill="url(#studioGrad)" />
+                </svg>
+              </div>
+
+              <span class="inline-flex items-center gap-1.5 mb-3 px-3 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] text-xs font-semibold uppercase tracking-wider">
+                <i class="fa-solid fa-gem"></i> Profesional
+              </span>
+
+              <h3 class="text-2xl font-bold mb-2">Aurora Studio</h3>
+              <p class="text-[var(--text-muted)] text-sm mb-4">
+                Cancelación de ruido profesional, 40 horas de batería y audio de estudio para creadores de contenido.
+              </p>
+
+              <ul class="space-y-2 mb-6 text-sm text-[var(--text-muted)]">
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> ANC Pro
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> 40h de batería
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fa-solid fa-check text-[var(--accent)]"></i> Audio de estudio
+                </li>
+              </ul>
+
+              <div class="flex items-center justify-between">
+                <span class="text-3xl font-extrabold text-[var(--accent)]">$299</span>
+                <button class="px-5 py-2.5 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] text-white font-semibold transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_10px_20px_-8px_var(--accent)]">
+                  Comprar
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Empresa Section -->
+    <section id="empresa" class="py-20 sm:py-28 bg-[var(--surface-muted)]/50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-6">Sobre Aurora Audio</h2>
+            <p class="text-[var(--text-muted)] text-lg leading-relaxed mb-8">
+              Aurora Audio nació en 2024 con una misión clara: llevar la experiencia audio premium a todos. Creemos que todo el mundo merece disfrutar de música de alta calidad sin compromisos.
+            </p>
+
+            <div class="space-y-6">
+              <div class="flex gap-4">
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] flex items-center justify-center text-white">
+                  <i class="fa-solid fa-bullseye text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg mb-1">Nuestra Misión</h3>
+                  <p class="text-[var(--text-muted)] text-sm">
+                    Democratizar el audio premium mediante tecnología accesible y diseño innovador.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] flex items-center justify-center text-white">
+                  <i class="fa-solid fa-eye text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg mb-1">Nuestra Visión</h3>
+                  <p class="text-[var(--text-muted)] text-sm">
+                    Ser líderes en tecnología de audio inalámbrico, reconocidos por calidad e innovación.
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] flex items-center justify-center text-white">
+                  <i class="fa-solid fa-heart text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-lg mb-1">Nuestros Valores</h3>
+                  <p class="text-[var(--text-muted)] text-sm">
+                    Calidad sin compromisos, innovación constante, accesibilidad para todos.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative">
+            <div class="absolute inset-0 rounded-3xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] opacity-20 blur-3xl"></div>
+            <div class="relative rounded-3xl bg-[var(--surface)] border border-[var(--border)] p-8 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.15)]">
+              <div class="flex items-center gap-3 mb-6">
+                <span class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--accent-light)] to-[var(--accent)] text-white">
+                  <i class="fa-solid fa-bolt text-xl"></i>
+                </span>
+                <span class="font-bold tracking-wide text-xl">Aurora Audio</span>
+              </div>
+
+              <p class="text-[var(--text-muted)] text-sm leading-relaxed mb-6">
+                Desde nuestra fundación, hemos trabajado incansablemente para crear productos que superen las expectativas de nuestros usuarios. Cada audífono Aurora Audio es el resultado de años de investigación y desarrollo.
+              </p>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div class="text-center p-4 rounded-xl bg-[var(--surface-muted)]">
+                  <p class="text-3xl font-extrabold text-[var(--accent)]">2024</p>
+                  <p class="text-xs text-[var(--text-muted)] uppercase tracking-wide">Fundación</p>
+                </div>
+                <div class="text-center p-4 rounded-xl bg-[var(--surface-muted)]">
+                  <p class="text-3xl font-extrabold text-[var(--accent)]">50K+</p>
+                  <p class="text-xs text-[var(--text-muted)] uppercase tracking-wide">Clientes</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-[var(--bg)] text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="flex items-center justify-center w-9 h-9 rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
+              <i class="fa-solid fa-bolt text-[var(--accent-light)] text-sm"></i>
+            </span>
+            <span class="font-bold tracking-wide text-lg">Aurora Audio</span>
+          </div>
+          <p class="text-white/70 text-sm">
+            Audio premium para todos. Descubre la diferencia de la calidad Aurora.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Contacto</h4>
+          <ul class="space-y-2 text-sm text-white/70">
+            <li class="flex items-center gap-2">
+              <i class="fa-solid fa-envelope text-[var(--accent-light)]"></i>
+              info@auroraaudio.com
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="fa-solid fa-phone text-[var(--accent-light)]"></i>
+              +1 (555) 123-4567
+            </li>
+            <li class="flex items-center gap-2">
+              <i class="fa-solid fa-location-dot text-[var(--accent-light)]"></i>
+              Ciudad de México, MX
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Síguenos</h4>
+          <div class="flex gap-3">
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center transition-colors duration-300 hover:bg-white/20">
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center transition-colors duration-300 hover:bg-white/20">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center transition-colors duration-300 hover:bg-white/20">
+              <i class="fa-brands fa-twitter"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/15 flex items-center justify-center transition-colors duration-300 hover:bg-white/20">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-white/10 text-center text-sm text-white/50">
+        <p>&copy; 2026 Aurora Audio. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="scripts/js/modules/dashboard.js"></script>
+</body>
+</html>

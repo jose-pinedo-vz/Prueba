@@ -24,30 +24,8 @@ function clearError() {
   errorEl.classList.remove("animate-shake");
 }
 
-// Transición fade + slide entre el formulario y el panel de éxito.
-function fadeOut(el, onDone) {
-  el.classList.add("opacity-0", "-translate-y-2");
-  setTimeout(() => {
-    el.hidden = true;
-    onDone?.();
-  }, 300);
-}
-
-function fadeIn(el) {
-  el.hidden = false;
-  el.classList.add("opacity-0", "translate-y-2");
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      el.classList.remove("opacity-0", "-translate-y-2", "translate-y-2");
-    });
-  });
-}
-
 export function initLoginForm() {
   const form = document.getElementById("loginForm");
-  const successPanel = document.getElementById("successPanel");
-  const successName = document.getElementById("successName");
-  const logoutBtn = document.getElementById("logoutBtn");
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -68,16 +46,8 @@ export function initLoginForm() {
       return;
     }
 
-    fadeOut(form, () => {
-      successName.textContent = user.name;
-      fadeIn(successPanel);
-    });
-  });
-
-  logoutBtn.addEventListener("click", () => {
-    fadeOut(successPanel, () => {
-      form.reset();
-      fadeIn(form);
-    });
+    // Guardar usuario en localStorage y redirigir al dashboard
+    localStorage.setItem("aurora-user", JSON.stringify(user));
+    window.location.href = "dashboard.html";
   });
 }
